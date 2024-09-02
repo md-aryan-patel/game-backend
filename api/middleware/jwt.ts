@@ -4,6 +4,8 @@ import { UserStore } from "../../db/user";
 import dotenv from "dotenv";
 dotenv.config();
 
+type validTokenResponse = Promise<{ id: string; expires: number }>;
+
 export function JWTAuthentication(userStore: UserStore) {
   return async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers["x-api-token"];
@@ -33,9 +35,7 @@ export function JWTAuthentication(userStore: UserStore) {
   };
 }
 
-async function validateToken(
-  tokenString: string
-): Promise<{ id: string; expires: number }> {
+async function validateToken(tokenString: string): validTokenResponse {
   const token = jwt.verify(tokenString, process.env.JWT_SECRET as string);
 
   if (!token || typeof token !== "object") {
