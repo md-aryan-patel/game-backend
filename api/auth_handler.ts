@@ -2,6 +2,12 @@ import jwt = require("jsonwebtoken");
 import { UserStore } from "../db/user";
 import { IsValidPassword, User } from "../types/user";
 import { Request, Response } from "express";
+import {
+  Validate,
+  CreateUserParams,
+  NewUserFromParameaters,
+} from "../types/user";
+
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -31,6 +37,24 @@ export class AuthHandler {
       return res.status(200).json(response);
     } catch (err) {
       return res.status(500).send(err);
+    }
+  };
+
+  HandlePostUser: (req: Request, res: Response) => void = async (req, res) => {
+    var param: CreateUserParams = req.body;
+    const errors = Validate(param);
+    if (Object.keys(errors).length > 0) {
+      res.status(400).send({ errors });
+      return;
+    }
+    const user = NewUserFromParameaters(param);
+    try {
+      const insertedUser = await this.userStore.InsertUser(user);
+      res
+        .status(201)
+        .json({ message: "User created successfully", insertedUser });
+    } catch (err) {
+      res.status(500).send(err);
     }
   };
 }

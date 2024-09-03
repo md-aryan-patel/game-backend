@@ -5,10 +5,7 @@ type ValidationError = {
   [key: string]: string;
 };
 
-type returnError = Map<string, string>;
-
 const minFirstNameLength = 2;
-const minLastNameLength = 3;
 const minPasswordLength = 7;
 
 export interface CreateUserParams {

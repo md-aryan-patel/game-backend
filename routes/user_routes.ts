@@ -13,7 +13,6 @@ const userStore = UserStoreSingleton.getInstance();
 const userHandler = UserHandlerSingleton.getInstance();
 
 router.use(JWTAuthentication(userStore));
-router.post("/user", userHandler.HandlePostUser);
 router.get("/users", userHandler.HandleGetUsers);
 router.delete("/user/:id", userHandler.HandleDeleteUser);
 
